@@ -51,20 +51,25 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             return super(BaseHandler, self).static_url(path, include_host=include_host, **kwargs)
 
+    @property
+    def iphone_data(self):
+        return self.application.iphone_data
+
+#class PhoneStatusHandler(sockjs.tornado.SockJSConnection):
+
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        data = scraper()
-        print data
-        self.write(json.dumps(data))
+        self.write(json.dumps(self.iphone_data))
 
 def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6"):
+	print "Scraper is running."
 	page = urllib2.urlopen(page_url)
 	soup = BeautifulSoup(page)
 	script = soup.find('script', text=re.compile('window\.productSelectionController\.addData'))
 	json_text = re.search(r'^\s*window\.productSelectionController\.addData\(({.*?})\s*\);\s*$', script.string, flags=re.DOTALL | re.MULTILINE).group(1)
 	data = json.loads(json_text)
-	data_extract = []
+	app.iphone_data = []
 
 	for d in data["products"]:
 		model = "iDiot"
@@ -88,20 +93,18 @@ def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6"):
 			'availability': availablility
 		}
 
-		data_extract.append(info)
-
-	return data_extract
+		app.iphone_data.append(info)
 
 def main():
     tornado.options.parse_config_file(os.path.join(os.path.dirname(__file__), "config.py"))
     tornado.options.parse_command_line()
+    global app
     app = Application()
+    app.iphone_data = []
 
-    '''
-    scheduler = Scheduler()
-    scheduler.add_job(scraper, 'interval', minutes=15)
+    scheduler = TornadoScheduler()
+    scheduler.add_job(scraper, 'interval', seconds=60)
     scheduler.start()
-    '''
 
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)
