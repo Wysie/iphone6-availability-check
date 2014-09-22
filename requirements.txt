@@ -5,6 +5,7 @@ certifi==14.05.14
 futures==2.1.6
 pytz==2014.7
 six==1.8.0
+sockjs-tornado==1.0.1
 tornado==4.0.2
 tzlocal==1.1.1
 wsgiref==0.1.2

@@ -29,7 +29,7 @@ for d in data["products"]:
 	print "Capacity: {0}".format(capacity)
 	print "Price: ${0}".format(price)
 	print "Shipping Quote: {0}".format(shipping_quote)
-	print "Availablility: {0}\n".format(availablility)
+	print "Availability: {0}\n".format(availablility)
 
 	info = {
 		'model': model,
@@ -37,7 +37,7 @@ for d in data["products"]:
 		'capacity': capacity,
 		'price': price,
 		'shippingQuote': shipping_quote,
-		'availablility': availablility
+		'availability': availablility
 	}
 
 	data_extract.append(info)
