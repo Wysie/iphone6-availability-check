@@ -60,7 +60,7 @@ class BaseHandler(tornado.web.RequestHandler):
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        self.write(json.dumps(self.iphone_data))
+        self.render('index.html', data=json.dumps(self.iphone_data))
 
 def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6"):
 	print "Scraper is running."

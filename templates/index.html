@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>iPhone 6 Availability Status - Apple Store Online, Singapore</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{{ static_url("css/sticky-footer.min.css") }}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body role="document">
+
+    <div class="container theme-showcase" role="main">
+      <div class="page-header">
+        <h1>iPhone 6 Availability Status <small>Apple Store Online, Singapore</small></h1>
+      </div>
+      <div class="row">
+        <div class="col-sm-12"><h2>iPhone 6 Plus</h2></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12"><p>This page pulls the data from the Apple Store every 60 seconds.</p></div>
+      </div>
+      <div class="row" id="iphone6plus">
+      </div>
+      <div class="row">
+        <div class="col-sm-12"><h2>iPhone 6</h2></div>
+      </div>
+      <div class="row" id="iphone6">
+      </div>
+    </div> <!-- /container -->
+
+    <div class="footer">
+      <div class="container">
+        <p class="text-muted">Made by <a href="https://twitter.com/Wysie_Soh">@Wysie_Soh</a>. Please let me know via Twitter if there are any bugs or suggestions, thanks! <a href="http://t.yc.sg">http://t.yc.sg</a></p>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="{{ static_url("js/process.min.js") }}"></script>
+
+    {% if data is not None %}
+    <script>
+      processResults({% raw data %});
+    </script>
+    {% end %}
+  </body>
+</html>
