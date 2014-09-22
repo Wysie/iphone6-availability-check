@@ -37,11 +37,30 @@
 
     <div class="container theme-showcase" role="main">
       <div class="page-header">
-        <h1>iPhone 6 Availability Status <small>Apple Store Online, Singapore</small></h1>
+        <h1>iPhone 6 Availability Status <small>Source: Apple Store Online</small></h1>
       </div>
       <div class="row">
-        <div class="col-sm-12"><p>This page pulls the data from the Apple Store every 60 seconds.</p></div>
+        <div class="col-sm-12"><p><em>This page pulls the data from the Apple Store every 60 seconds. Price is displayed in the currency of the selected country.</em></p></div>
       </div>
+      <div class="row">
+        <div class="col-sm-12"><p>Please select a country.</p></div>
+      </div>
+
+      <!--
+      <div class="btn-group countries">
+        <button type="button" class="btn btn-default" id="btnsg">Singapore</button>
+        <button type="button" class="btn btn-default" id="btnhk">Hong Kong</button>
+        <button type="button" class="btn btn-default" id="btntw">Taiwan</button>
+        <button type="button" class="btn btn-default" id="btnau">Australia</button>
+      </div>
+      -->
+
+      <ul class="nav nav-pills countries">
+        <li class="active"><a href="#">Singapore</a></li>
+        <li><a href="#">Hong Kong</a></li>
+        <li><a href="#">Taiwan</a></li>
+        <li><a href="#">Australia</a></li>
+      </ul>
       <div class="row">
         <div class="col-sm-12"><h2>iPhone 6 Plus</h2></div>
       </div>
@@ -62,11 +81,12 @@
 
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="{{ static_url("js/process.min.js") }}"></script>
+    <script src="{{ static_url("js/process.js") }}"></script>
 
     {% if data is not None %}
     <script>
-      processResults({% raw data %});
+      var rawData = {% raw data %}
+      processResults(rawData, "sg");
     </script>
     {% end %}
   </body>
