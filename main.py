@@ -102,6 +102,7 @@ def main():
     app = Application()
     app.iphone_data = []
 
+    scraper()
     scheduler = TornadoScheduler()
     scheduler.add_job(scraper, 'interval', seconds=60)
     scheduler.start()
