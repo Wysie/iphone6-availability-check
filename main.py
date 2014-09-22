@@ -63,7 +63,6 @@ class IndexHandler(BaseHandler):
         self.render('index.html', data=json.dumps(self.iphone_data))
 
 def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6"):
-	print "Scraper is running."
 	page = urllib2.urlopen(page_url)
 	soup = BeautifulSoup(page)
 	script = soup.find('script', text=re.compile('window\.productSelectionController\.addData'))
