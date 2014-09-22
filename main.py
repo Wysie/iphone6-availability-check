@@ -25,10 +25,10 @@ define("cdn_endpoint")
 
 class Application(tornado.web.Application):
     def __init__(self):
-        #SockRouter = sockjs.tornado.SockJSRouter(ServerStatusHandler, '/status')
+        SockRouter = sockjs.tornado.SockJSRouter(ServerDataHandler, '/data')
         handlers = [
             (r'/', IndexHandler),
-		]# + SockRouter.urls
+		] + SockRouter.urls
         settings = dict(
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             static_path = os.path.join(os.path.dirname(__file__), "static"),
@@ -53,16 +53,40 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             return super(BaseHandler, self).static_url(path, include_host=include_host, **kwargs)
 
+class BaseSocketHandler(sockjs.tornado.SockJSConnection):
     @property
-    def iphone_data(self):
-        return self.application.iphone_data
+    def server_variables(self):
+        return app.server_variables
 
-#class PhoneStatusHandler(sockjs.tornado.SockJSConnection):
+allsockets = [] # Hackish method to access the methods within the ServerDataHandler
+
+class ServerDataHandler(BaseSocketHandler):
+    clients = set()
+
+    def on_open(self, info):
+        self.clients.add(self)
+        if self not in allsockets:
+            allsockets.append(self)
+
+    def on_message(self, msg):
+        self.broadcast(self.clients, msg)
+
+    def on_close(self):
+        self.clients.remove(self)
+        if self in allsockets:
+            allsockets.remove(self)
+
+# Hackish method. Logically we can loop through each of the object in allsockets and send a message,
+# but since there is a broadcast function, we only need to make use of any one object. For simplicity,
+# we are using the first object in the list.
+def update_data():
+    if len(allsockets) > 0:
+        allsockets[0].broadcast(allsockets[0].clients, json.dumps(app.iphone_data))
 
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        self.render('index.html', data=json.dumps(self.iphone_data))
+        self.render('index.html', data=json.dumps(app.iphone_data))
 
 def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6", country = "sg"):
     page = urllib2.urlopen(page_url)
@@ -81,7 +105,8 @@ def scraper(page_url = "http://store.apple.com/sg/buy-iphone/iphone6", country =
 
         colour = d["dimensionColor"].replace("_", " ").title()
         capacity = d["dimensionCapacity"].title()
-        price = d["price"].replace("_", ".")
+        price = "{:,.2f}".format(float(d["price"].replace("_", ".")))
+
         shipping_quote = d["displayShippingQuote"].title() if country != "tw" else d["displayShippingQuote"]
         availablility = "Yes"
 
@@ -123,10 +148,12 @@ def main():
     scraper_tw()
     scraper_au()
     scheduler = TornadoScheduler()
-    scheduler.add_job(scraper_sg, 'interval', seconds=60)
-    scheduler.add_job(scraper_hk, 'interval', seconds=60)
-    scheduler.add_job(scraper_tw, 'interval', seconds=60)
-    scheduler.add_job(scraper_au, 'interval', seconds=60)
+    time_interval = 60
+    scheduler.add_job(scraper_sg, 'interval', seconds=time_interval)
+    scheduler.add_job(scraper_hk, 'interval', seconds=time_interval)
+    scheduler.add_job(scraper_tw, 'interval', seconds=time_interval)
+    scheduler.add_job(scraper_au, 'interval', seconds=time_interval)
+    scheduler.add_job(update_data, 'interval', seconds=time_interval)
     scheduler.start()
 
     http_server = tornado.httpserver.HTTPServer(app)

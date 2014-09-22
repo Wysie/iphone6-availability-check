@@ -3,23 +3,27 @@ $(document).ready(function() {
     $('ul.countries li.active').removeClass('active');
     $(this).parent('li').addClass('active');
     var country = $(this).text();
-
-    switch (country) {
-      case "Singapore":
-        processResults(rawData, "sg");
-        break;
-      case "Hong Kong":
-        processResults(rawData, "hk");
-        break;
-      case "Taiwan":
-        processResults(rawData, "tw");
-        break;
-      case "Australia":
-        processResults(rawData, "au");
-        break;
-    }
+    processResults(rawData, mapCountry(country));
   });
+  setTimeout(makeSockJSConnection(), 100);
 });
+
+function mapCountry(country) {
+  switch (country) {
+    case "Singapore":
+      return "sg";
+      break;
+    case "Hong Kong":
+      return "hk";
+      break;
+    case "Taiwan":
+      return "tw";
+      break;
+    case "Australia":
+      return "au";
+      break;
+  }  
+}
 
 function processResults(iPhoneData, country) {
   $('#iphone6plus').empty();
@@ -50,4 +54,16 @@ function processResults(iPhoneData, country) {
       $('#iphone6').append(s); 
     }
   }
+}
+
+function makeSockJSConnection() {
+  var sock = new SockJS('http://' + window.location.host + '/data');
+  sock.onopen = function(evt) { console.log('SockJS connection opened.') };
+  sock.onmessage = function(evt) {
+      data = $.parseJSON(evt.data);
+      country = $('ul.countries li.active').text();
+      processResults(data, mapCountry(country));
+  };
+  sock.onerror = function(evt) { };
+  sock.onclose = function(evt) { console.log('SockJS connection closed.') };
 }
