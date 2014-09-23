@@ -1,0 +1,9 @@
+/* TEAM */
+
+Your title: Yuan Chin (YC)
+Website: http://yc.sg                      
+Twitter: @Wysie_Soh                            
+Location: Singapore
+                            
+/* SITE */
+Bootstrap, Tornado, jQuery, SockJS, BeautifulSoup
