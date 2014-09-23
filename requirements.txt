@@ -1,8 +1,10 @@
 APScheduler==3.0.0
+arrow==0.4.4
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 certifi==14.05.14
 futures==2.1.6
+python-dateutil==2.2
 pytz==2014.7
 six==1.8.0
 sockjs-tornado==1.0.1

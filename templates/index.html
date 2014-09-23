@@ -41,12 +41,11 @@
         <h1>iPhone 6 Availability Status <small>Source: Apple Store Online</small></h1>
       </div>
       <div class="row">
-        <div class="col-sm-12"><p><em>This page pulls the data from the Apple Store and refreshes every 60 seconds automatically. Price is displayed in the currency of the selected country.</em></p></div>
+        <div class="col-sm-12"><p><em>This page pulls the data from the Apple Store and refreshes every 60 seconds automatically.</em> <span class="label label-default">Last updated: <span id="lastUpdated"></span></span></p></div>
       </div>
       <div class="row">
-        <div class="col-sm-12"><p>Please select a country.</p></div>
+        <div class="col-sm-12"><p>Please select a country. <em>Price is displayed in the currency of the selected country.</em></p></div>
       </div>
-
       <!--
       <div class="btn-group countries">
         <button type="button" class="btn btn-default" id="btnsg">Singapore</button>
@@ -82,13 +81,11 @@
 
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="{{ static_url("js/process.min.js") }}"></script>
-
-    {% if data is not None %}
+    <script src="{{ static_url("js/process.js") }}"></script>
     <script>
       var rawData = {% raw data %}
       processResults(rawData, "sg");
+      processTime(rawData);
     </script>
-    {% end %}
   </body>
 </html>

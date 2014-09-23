@@ -56,6 +56,12 @@ function processResults(iPhoneData, country) {
   }
 }
 
+function processTime(iPhoneData) {
+  lastUpdated = iPhoneData["last_updated"];
+  d = new Date(lastUpdated);
+  $('#lastUpdated').text(d);
+}
+
 function makeSockJSConnection() {
   var sock = new SockJS('http://' + window.location.host + '/data');
   sock.onopen = function(evt) { console.log('SockJS connection opened.') };
@@ -63,6 +69,7 @@ function makeSockJSConnection() {
       data = $.parseJSON(evt.data);
       country = $('ul.countries li.active').text();
       processResults(data, mapCountry(country));
+      processTime(data);
   };
   sock.onerror = function(evt) { };
   sock.onclose = function(evt) { console.log('SockJS connection closed.') };

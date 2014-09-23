@@ -18,6 +18,8 @@ from tornado import gen
 from tornado.options import define, options
 import sockjs.tornado
 
+import arrow
+
 define("port", default=8888, help="Port to run the server on", type=int)
 define("debug_mode", default=True)
 define("cdn_enabled", default=False)
@@ -136,6 +138,13 @@ def scraper_tw():
 def scraper_au():
     scraper("http://store.apple.com/au/buy-iphone/iphone6", "au")
 
+def scraper_all():
+    scraper_sg()
+    scraper_hk()
+    scraper_tw()
+    scraper_au()
+    app.iphone_data["last_updated"] = arrow.utcnow().timestamp * 1000
+
 def main():
     tornado.options.parse_config_file(os.path.join(os.path.dirname(__file__), "config.py"))
     tornado.options.parse_command_line()
@@ -143,16 +152,10 @@ def main():
     app = Application()
     app.iphone_data = {}
 
-    scraper_sg()
-    scraper_hk()
-    scraper_tw()
-    scraper_au()
+    scraper_all()
     scheduler = TornadoScheduler()
     time_interval = 60
-    scheduler.add_job(scraper_sg, 'interval', seconds=time_interval)
-    scheduler.add_job(scraper_hk, 'interval', seconds=time_interval)
-    scheduler.add_job(scraper_tw, 'interval', seconds=time_interval)
-    scheduler.add_job(scraper_au, 'interval', seconds=time_interval)
+    scheduler.add_job(scraper_all, 'interval', seconds=time_interval)
     scheduler.add_job(update_data, 'interval', seconds=time_interval)
     scheduler.start()
 
