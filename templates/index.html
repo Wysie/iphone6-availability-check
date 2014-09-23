@@ -53,10 +53,40 @@
   </head>
 
   <body role="document">
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '852394364780336',
+          xfbml      : true,
+          version    : 'v2.1'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <div class="container theme-showcase" role="main">
       <div class="page-header">
         <h1>iPhone 6 Availability Status <small>Source: Apple Store Online</small></h1>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://ip6.yc.sg" data-text="Check if the iPhone is available on the Apple Store for Singapore, Hong Kong, Taiwan and Australia!" data-via="Wysie_Soh" data-hashtags="iphone">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+          <div
+            class="fb-like"
+            data-share="true"
+            data-width="450"
+            data-show-faces="true">
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-12"><p><em>This page pulls the data from the Apple Store and refreshes every 60 seconds automatically.</em> <span class="label label-default">Last updated: <span id="lastUpdated"></span></span></p></div>
@@ -99,7 +129,7 @@
 
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="{{ static_url("js/process.js") }}"></script>
+    <script src="{{ static_url("js/process.min.js") }}"></script>
     <script>
       var rawData = {% raw data %}
       processResults(rawData, "sg");
